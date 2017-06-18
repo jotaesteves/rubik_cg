@@ -1,3 +1,8 @@
+  
+import processing.sound.*;
+Amplitude amp;
+SoundFile musica;
+
 ArrayList<Cube> myCubes = new ArrayList<Cube>();
 int tam = 100;
 int d = 15;
@@ -51,17 +56,30 @@ int cor[ ][ ]={
 
 
 
+
 void setup() {
   frameRate(25);
   size(800, 600, P3D);
 
+  //song 
+  amp = new Amplitude(this);
+  musica = new SoundFile (this,"sample1.mp3");
+  musica.play();
+  amp.input(musica);
+  
+  
+  
   obsX= width/2.0;
   obsY= height/2.0;  
   obsZ= 700;  
 
+  //cores dos focos de luz 
   r=0;
   g=0;
   b=0;
+
+
+  
 
 
 
@@ -84,6 +102,8 @@ void setup() {
 void draw() {
   background(255);
 
+  println(amp.analyze());
+
   //centerX = map(mouseX, 0, width, width, 0);
   //centerY = map(mouseY, 0, height, height, 0);
   camera(pX, pY, pZ, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
@@ -91,10 +111,10 @@ void draw() {
 
   //float orbitRadius= mouseX+550;
   //float ypos= (mouseY/2)*4;
- // float xpos= cos(radians(rotation))*orbitRadius;
+  // float xpos= cos(radians(rotation))*orbitRadius;
   //float zpos= sin(radians(rotation))*orbitRadius;
 
- // camera(xpos, ypos, zpos, 0, 0, 0, 0, -1, 0);
+  // camera(xpos, ypos, zpos, 0, 0, 0, 0, -1, 0);
 
 
   //Luz ambiente
@@ -107,15 +127,15 @@ void draw() {
   spotLight(0, g, 0, 0, 0, (width/2), 0, 0, -1, PI, concentration);
 
   //Luz da esfera B
-  spotLight(0, 0, b, 0,(width/2), 0, 0, 0, -1, PI, concentration);
+  spotLight(0, 0, b, 0, (width/2), 0, 0, 0, -1, PI, concentration);
 
 
 
 
   // Desenha Cubos
-  
-  
-  
+
+
+
   //translate(width/2,height/2);
   rotateX(-mouseY*PI/300);
   rotateY(-mouseX*PI/300);
@@ -123,7 +143,7 @@ void draw() {
   for (Cube myCube : myCubes) {
     myCube.display();
   }
- 
+
 
   //textureWrap (CLAMP); // SEM repetição
   desenhaEixos();
