@@ -9,11 +9,11 @@ float speedBaixo=10;
 float ampScale=1;
 float speedMeio=5;
 
-float smooth_factor=0.15;
+float smooth_factor=0.55;
 float sum;
-float sumScale=5;
-
+float sumScale=2;
 float ampln;
+int index;
 
 ArrayList<Cube> myCubes = new ArrayList<Cube>();
 
@@ -21,7 +21,8 @@ int tam = 100;
 int d = 15;
 
 boolean roda = true;
-
+boolean spot = true;
+boolean camera = false;
 
 //camera
 float rotation = 0;
@@ -35,7 +36,7 @@ float centerX, centerY;
 float obsX, obsY, obsZ;
 
 // Texturas
-PImage img1,img2,img3;
+PImage img1, img2, img3;
 
 
 
@@ -79,8 +80,8 @@ void setup() {
 
   musica = new SoundFile (this, "sample1.mp3");
   musica.play();
-  
-   amp = new Amplitude(this);
+
+  amp = new Amplitude(this);
   amp.input(musica);
 
 
@@ -96,7 +97,9 @@ void setup() {
 
 
 
-//Carregar as imagens
+
+
+  //Carregar as imagens
 
   textureMode(NORMAL);
 
@@ -123,65 +126,59 @@ void draw() {
 
   ampln = amp.analyze(); 
 
-  println(ampln);
-  
-  
-  
-  
-  // smooth the rms data by smoothing factor
+  // suaviza o amp
   sum += (amp.analyze()-sum) * smooth_factor;  
 
-  // amp.analyze() return a value between 0 and 1. It's
-  // scaled to height/2 and then multiplied by a scale factor
   float ampScale=sum*(height/2)*sumScale;
+  println(ampScale);
 
-println(ampScale);
+  float ampDiv = ampln*100;
+  println("new:"+ampDiv);
+
+  if ((ampScale >=  0 )&&(ampScale <  100)) {
 
 
- if ((ampScale >=  0 )&&(ampScale <  200)){
+    /**Face Baixo**/
+    myCubes.get(0).moveB(ampScale/ampDiv);
+    myCubes.get(1).moveB(ampScale/11);
+    myCubes.get(2).moveB(ampScale/13);
+    myCubes.get(9).moveB(ampScale/ampDiv);
+    myCubes.get(10).moveB(ampScale/12);
+    myCubes.get(11).moveB(ampScale/ampDiv);
+    myCubes.get(18).moveB(ampScale/14);
+    myCubes.get(19).moveB(ampScale/ampDiv);
+    myCubes.get(20).moveB(ampScale/10);
+    /**--ENd Face Baixo--**/
+  } else if ((ampScale >= 100) &&(ampScale <150)) {
+    /**Face Meio**/
+    myCubes.get(3).moveM(ampDiv*2);
+    myCubes.get(4).moveM(ampDiv);
+    myCubes.get(5).moveM(ampDiv*3);
+    myCubes.get(12).moveM(ampDiv);
+    myCubes.get(13).moveM(ampDiv-(ampDiv/2));
+    myCubes.get(14).moveM(ampDiv);
+    myCubes.get(21).moveM(ampDiv);
+    myCubes.get(22).moveM(ampDiv*2);
+    myCubes.get(23).moveM(ampDiv);
+    /**--ENd Face Meio--**/
+  } else if ((ampScale >=150) && (ampScale<=400)) {
 
-  /**Face Baixo**/
-  myCubes.get(0).moveB(ampScale/10);
-  myCubes.get(1).moveB(ampScale/11);
-  myCubes.get(2).moveB(ampScale/13);
-  myCubes.get(9).moveB(ampScale/14);
-  myCubes.get(10).moveB(ampScale/12);
-  myCubes.get(11).moveB(ampScale/11);
-  myCubes.get(18).moveB(ampScale/14);
-  myCubes.get(19).moveB(ampScale/10);
-  myCubes.get(20).moveB(ampScale/10);
-  /**--ENd Face Baixo--**/
-
- }else if ((ampScale >= 200) &&(ampScale <400)) {
-  /**Face Meio**/
-  myCubes.get(3).moveM(ampScale/8);
-  myCubes.get(4).moveM(ampScale);
-  myCubes.get(5).moveM(ampScale);
-  myCubes.get(12).moveM(ampScale/8);
-  myCubes.get(13).moveM(ampScale);
-  myCubes.get(14).moveM(ampScale);
-  myCubes.get(21).moveM(ampScale/8);
-  myCubes.get(22).moveM(ampScale);
-  myCubes.get(23).moveM(ampScale/8);
-  /**--ENd Face Meio--**/
- }else if ((ampScale >=300) && (ampScale<=500)) {
-   
-  /**Face Cima**/
-  myCubes.get(6).moveC(ampScale/2);
-  myCubes.get(7).moveC(ampScale/3);
-  myCubes.get(8).moveC(ampScale);
-  myCubes.get(15).moveC(ampScale/2);
-  myCubes.get(16).moveC(ampScale/3);
-  myCubes.get(17).moveC(ampScale);
-  myCubes.get(24).moveC(ampScale/5);
-  myCubes.get(25).moveC(ampScale/8);
-  myCubes.get(26).moveC(ampScale/10);
-  /**--ENd Face Cima--**/
- }
+    /**Face Cima**/
+    myCubes.get(6).moveC(ampScale/2);
+    myCubes.get(7).moveC(ampScale/3);
+    myCubes.get(8).moveC(ampScale);
+    myCubes.get(15).moveC(ampScale/2);
+    myCubes.get(16).moveC(ampScale/3);
+    myCubes.get(17).moveC(ampScale);
+    myCubes.get(24).moveC(ampScale/5);
+    myCubes.get(25).moveC(ampScale/8);
+    myCubes.get(26).moveC(ampScale/10);
+    /**--ENd Face Cima--**/
+  }
   //centerX = map(mouseX, 0, width, width, 0);
   //centerY = map(mouseY, 0, height, height, 0);
   //camera( obsX, obsY, obsZ, centerX, centerY, 0, 0, 1, 0);
-  camera(pX, pY, pZ, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+  
 
 
   //float orbitRadius= mouseX+550;
@@ -193,37 +190,40 @@ println(ampScale);
 
 
   //Luz ambiente
+  if(spot==true){
   spotLight(255, 255, 255, 0, 0, 0, Hsize/2, 0, -1, PI, 0);
-
+  } else{
+  ambientLight(200, 200, 200);
+  }
   //Luz da esfera R
-  spotLight(r, 0, 0, (width/2), 0, 0, 0, 0, -1, PI, concentration);
-
+  spotLight(r, 0, 0, (width), 0, 0, 0, 0, -1, PI, concentration);
   //Luz da esfera G
-  spotLight(0, g, 0, 0, 0, (width/2), 0, 0, -1, PI, concentration);
-
+  spotLight(0, g, 0, 0, 0, (width), 0, 0, -1, PI, concentration);
   //Luz da esfera B
-  spotLight(0, 0, b, 0, (width/2), 0, 0, 0, -1, PI, concentration);
+  spotLight(0, 0, b, 0, (width), 0, 0, 0, -1, PI, concentration);
+  
+  spotLight(255, 142, 62, 500, 100, 200, 0, 0, -1, PI, concentration);
+  spotLight(0,150,250, (-width),0,0,  0,0,-1,  PI, concentration);
+  spotLight(250,150,0, 0,0,(-width),  0,0,-1,  PI, concentration);
 
 
 
-
-
-
-
-
+if(camera ==false){
   //translate(width/2,height/2);
   rotateX(-mouseY*PI/300);
   rotateY(-mouseX*PI/300);
   translate(-220, -220, -220);
-  
-  
+}else{
+ camera(pX, pY, pZ, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+}
+
   for (Cube myCube : myCubes) { 
     myCube.display();
   }
 
 
   //textureWrap (CLAMP); // SEM repetição
-  
+
   // Desenha Cubos
   //desenhaEixos();
   if (roda==true) {
@@ -281,6 +281,13 @@ void keyPressed() {
       b=0;
     }
   }
+  
+  if((key=='s') || (key=='S')){
+    if(spot == true)
+    spot =false;
+    else
+    spot =true;
+  }
 
   if (key=='+') {
     concentration=concentration-5;
@@ -288,23 +295,43 @@ void keyPressed() {
   if (key =='-') {
     concentration=concentration+5;
   }
-  
+
   if ((key=='t') || (key=='T')) {
     img1 = img2;
     img2 = img3;
     img3 = img1;
   }
-  
+
+if ((key=='c') || (key=='C')){
+   if(camera == true)
+    camera =false;
+    else
+    camera =true;
 }
 
-void desenhaEixos() {
-  noFill();
-  strokeWeight(5);
-  stroke(255, 100, 100);
-  line(0, 0, 0, 1500, 0, 0); //x
-  stroke(125, 100, 100);
-  line(0, 0, 0, 0, 1500, 0); //y
-  stroke(2, 100, 100);
-  line(0, 0, 0, 0, 0, 1500); //z
-  noStroke();
+  if (keyCode == ENTER) {
+    if (index > 0) {
+      index --;
+      myCubes.remove(index);
+    }
+    //for (int i = 0; i < 3; i++) {
+    //  for (int k = 0; k < 3; k++) {
+    //    for (int j = 0; j < 3; j++) {
+    //      myCubes.add(new Cube( tam + i*(tam+d), tam + k*(tam+d), tam+ j*(tam+d)));
+    //    }
+    //  }
+    //}
+  }
 }
+
+  void desenhaEixos() {
+    noFill();
+    strokeWeight(5);
+    stroke(255, 100, 100);
+    line(0, 0, 0, 1500, 0, 0); //x
+    stroke(125, 100, 100);
+    line(0, 0, 0, 0, 1500, 0); //y
+    stroke(2, 100, 100);
+    line(0, 0, 0, 0, 0, 1500); //z
+    noStroke();
+  }

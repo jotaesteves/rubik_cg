@@ -167,9 +167,9 @@ class Cube {
     }
 
     if (ccUP>=0 && ccUP<10) {
-      y-=speed;
-    } else {
       y+=speed;
+    } else {
+      y-=speed;
     }
   }
 
@@ -197,9 +197,9 @@ class Cube {
     }
 
     if (ccDOWN>=0 && ccDOWN<10) {
-      x+=speed;
+      y-=speed;
     } else {
-      x-=speed;
+      y+=speed;
     }
     
   }
