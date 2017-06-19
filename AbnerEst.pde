@@ -22,7 +22,7 @@ int d = 15;
 
 boolean roda = true;
 boolean spot = true;
-boolean camera = false;
+boolean camera;
 
 //camera
 float rotation = 0;
@@ -52,26 +52,6 @@ int fill1= 255;
 int fill2=25;
 int fill3=25;
 
-int cor[ ][ ]={
-  {255, 255, 255}, 
-  {255, 0, 0}, 
-  {0, 255, 0}, 
-  {0, 0, 255}, 
-  {255, 255, 0}, 
-  {0, 255, 255}, 
-  {255, 0, 255}, 
-  {180, 0, 0}, 
-  {0, 180, 0}, 
-  {0, 0, 180}, 
-  {180, 180, 0}, 
-  {0, 180, 180}, 
-  {180, 0, 180}
-};
-
-
-
-
-
 void setup() {
   frameRate(25);
   size(800, 600, P3D);
@@ -84,8 +64,6 @@ void setup() {
   amp = new Amplitude(this);
   amp.input(musica);
 
-
-
   obsX= width/2.0;
   obsY= height/2.0;  
   obsZ= 700;  
@@ -94,10 +72,6 @@ void setup() {
   r=0;
   g=0;
   b=0;
-
-
-
-
 
   //Carregar as imagens
 
@@ -175,19 +149,6 @@ void draw() {
     myCubes.get(26).moveC(ampScale/10);
     /**--ENd Face Cima--**/
   }
-  //centerX = map(mouseX, 0, width, width, 0);
-  //centerY = map(mouseY, 0, height, height, 0);
-  //camera( obsX, obsY, obsZ, centerX, centerY, 0, 0, 1, 0);
-  
-
-
-  //float orbitRadius= mouseX+550;
-  //float ypos= (mouseY/2)*4;
-  // float xpos= cos(radians(rotation))*orbitRadius;
-  //float zpos= sin(radians(rotation))*orbitRadius;
-
-  // camera(xpos, ypos, zpos, 0, 0, 0, 0, -1, 0);
-
 
   //Luz ambiente
   if(spot==true){
@@ -314,13 +275,7 @@ if ((key=='c') || (key=='C')){
       index --;
       myCubes.remove(index);
     }
-    //for (int i = 0; i < 3; i++) {
-    //  for (int k = 0; k < 3; k++) {
-    //    for (int j = 0; j < 3; j++) {
-    //      myCubes.add(new Cube( tam + i*(tam+d), tam + k*(tam+d), tam+ j*(tam+d)));
-    //    }
-    //  }
-    //}
+ 
   }
 }
 
