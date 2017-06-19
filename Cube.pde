@@ -4,6 +4,8 @@ class Cube {
   float z;
   float scale;
   float cc=0;
+  float ccUP= 0;
+  float ccDOWN = 0;
   float speed;
 
   public Cube (  float x, float y, float z) {
@@ -158,28 +160,47 @@ class Cube {
 
   void moveB(float speed) {
     this.speed=speed;
-    if (y<90) {
-      cc++;
-    } else {
-      cc--;
+    if (y<-500) {
+      ccUP++;
+    } else if (y>=500){
+      ccUP--;
     }
 
-    if (cc>=0 && cc<10) {
-      y+=speed;
-    } else {
+    if (ccUP>=0 && ccUP<10) {
       y-=speed;
+    } else {
+      y+=speed;
     }
   }
 
   void moveM(float speed) {
     this.speed=speed;
-    
-    x+=speed;
+    if (x<-100) {
+      cc++;
+    } else if (x>=100){
+      cc--;
+    }
+
+    if (cc>=0 && cc<20) {
+      x+=speed;
+    } else {
+      x-=speed;
+    }
   }
 
   void moveC(float speed) {
     this.speed=speed;
+    if (y<500) {
+      ccDOWN++;
+    } else if (y>=-500){
+      ccDOWN--;
+    }
+
+    if (ccDOWN>=0 && ccDOWN<10) {
+      x+=speed;
+    } else {
+      x-=speed;
+    }
     
-    y+=speed;
   }
 }

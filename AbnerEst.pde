@@ -9,6 +9,12 @@ float speedBaixo=10;
 float ampScale=1;
 float speedMeio=5;
 
+float smooth_factor=0.15;
+float sum;
+float sumScale=5;
+
+float ampln;
+
 ArrayList<Cube> myCubes = new ArrayList<Cube>();
 
 int tam = 100;
@@ -62,9 +68,6 @@ int cor[ ][ ]={
 };
 
 
-float smooth_factor=0.25;
-float sum;
-float sumScale=5;
 
 
 
@@ -75,7 +78,7 @@ void setup() {
   //song 
 
   musica = new SoundFile (this, "sample1.mp3");
-  musica.loop();
+  musica.play();
   
    amp = new Amplitude(this);
   amp.input(musica);
@@ -118,54 +121,61 @@ void setup() {
 void draw() {
   background(255);
 
-  println(amp.analyze());
+  ampln = amp.analyze(); 
+
+  println(ampln);
+  
+  
+  
   
   // smooth the rms data by smoothing factor
-  sum += (amp.analyze() - sum) * smooth_factor;  
+  sum += (amp.analyze()-sum) * smooth_factor;  
 
   // amp.analyze() return a value between 0 and 1. It's
   // scaled to height/2 and then multiplied by a scale factor
   float ampScale=sum*(height/2)*sumScale;
 
+println(ampScale);
 
- if ((amp.analyze() >=  0.0000 )&&( amp.analyze() <  0.06)){
+
+ if ((ampScale >=  0 )&&(ampScale <  200)){
 
   /**Face Baixo**/
-  myCubes.get(0).moveB(ampScale);
-  myCubes.get(1).moveB(ampScale);
-  myCubes.get(2).moveB(ampScale);
-  myCubes.get(9).moveB(ampScale);
-  myCubes.get(10).moveB(ampScale);
-  myCubes.get(11).moveB(ampScale);
-  myCubes.get(18).moveB(ampScale);
-  myCubes.get(19).moveB(ampScale);
-  myCubes.get(20).moveB(ampScale);
+  myCubes.get(0).moveB(ampScale/10);
+  myCubes.get(1).moveB(ampScale/11);
+  myCubes.get(2).moveB(ampScale/13);
+  myCubes.get(9).moveB(ampScale/14);
+  myCubes.get(10).moveB(ampScale/12);
+  myCubes.get(11).moveB(ampScale/11);
+  myCubes.get(18).moveB(ampScale/14);
+  myCubes.get(19).moveB(ampScale/10);
+  myCubes.get(20).moveB(ampScale/10);
   /**--ENd Face Baixo--**/
 
- }else if ((amp.analyze() >= 0.06) &&(amp.analyze() <0.09)) {
+ }else if ((ampScale >= 200) &&(ampScale <400)) {
   /**Face Meio**/
-  myCubes.get(3).moveM(ampScale);
+  myCubes.get(3).moveM(ampScale/8);
   myCubes.get(4).moveM(ampScale);
   myCubes.get(5).moveM(ampScale);
-  myCubes.get(12).moveM(ampScale);
+  myCubes.get(12).moveM(ampScale/8);
   myCubes.get(13).moveM(ampScale);
   myCubes.get(14).moveM(ampScale);
-  myCubes.get(21).moveM(ampScale);
+  myCubes.get(21).moveM(ampScale/8);
   myCubes.get(22).moveM(ampScale);
-  myCubes.get(23).moveM(ampScale);
+  myCubes.get(23).moveM(ampScale/8);
   /**--ENd Face Meio--**/
- }else if ((amp.analyze() >=0.09) && (amp.analyze()<=0.15)) {
+ }else if ((ampScale >=300) && (ampScale<=500)) {
    
   /**Face Cima**/
-  myCubes.get(6).moveC(ampScale);
-  myCubes.get(7).moveC(ampScale);
+  myCubes.get(6).moveC(ampScale/2);
+  myCubes.get(7).moveC(ampScale/3);
   myCubes.get(8).moveC(ampScale);
-  myCubes.get(15).moveC(ampScale);
-  myCubes.get(16).moveC(ampScale);
+  myCubes.get(15).moveC(ampScale/2);
+  myCubes.get(16).moveC(ampScale/3);
   myCubes.get(17).moveC(ampScale);
-  myCubes.get(24).moveC(ampScale);
-  myCubes.get(25).moveC(ampScale);
-  myCubes.get(26).moveC(ampScale);
+  myCubes.get(24).moveC(ampScale/5);
+  myCubes.get(25).moveC(ampScale/8);
+  myCubes.get(26).moveC(ampScale/10);
   /**--ENd Face Cima--**/
  }
   //centerX = map(mouseX, 0, width, width, 0);
@@ -215,7 +225,7 @@ void draw() {
   //textureWrap (CLAMP); // SEM repetição
   
   // Desenha Cubos
-  desenhaEixos();
+  //desenhaEixos();
   if (roda==true) {
     rotation++;
   }
